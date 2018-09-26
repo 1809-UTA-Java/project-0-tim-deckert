@@ -1,8 +1,6 @@
 package com.revature.app;
 
-class Account {
-    private String username;
-    private String password;
-
+public class Account {
+    private int accountNumber;
     private double funds = 0.0;
 }
