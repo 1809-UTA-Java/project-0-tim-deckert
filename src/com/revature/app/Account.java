@@ -1,6 +1,12 @@
 package com.revature.app;
 
-public class Account {
+import java.io.Serializable;
+
+public class Account implements Serializable, Comparable{
     private int accountNumber;
-    private double funds = 0.0;
+    private double funds;
+    
+    Account() {
+
+    }
 }

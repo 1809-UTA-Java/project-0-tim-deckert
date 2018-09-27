@@ -1,15 +1,10 @@
 package com.revature.app;
 
-public class Customer {
-    String username;
-    String password;
-
-    Customer () {
-
-    }
+public class Customer extends User {
+    private Account 
+    Customer () {}
     Customer (String username, String password) {
-        this.username = username;
-        this.password = password;
-        
+        super(username, password);
     }
+    
 }
