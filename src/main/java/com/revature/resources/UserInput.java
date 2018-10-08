@@ -1,10 +1,11 @@
-package com.revature.app;
+package com.revature.resources;
 
-import java.util.Scanner;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Scanner;
+import com.revature.app.*;
 
-class UserInput {
+public class UserInput {
     private static Scanner sc = new Scanner(System.in);
     private UserInput () {}
 
@@ -72,7 +73,6 @@ class UserInput {
         	ex.getMessage();
         }
         
-        
         return user_pass;
     }
 
@@ -80,6 +80,48 @@ class UserInput {
     	ArrayList<String> data = new ArrayList<>();
     	System.out.println("Thank you for applying for a Tim's Bank account");
     	System.out.println("We need some more information to get started");
+    	System.out.print("Are you filing for a joint account? If you are unsure, don't worry. "
+    					 + "People can be added to your account later. (yes/no): ");
+    	String answer = sc.nextLine();
+    	
+    	while (!answer.equalsIgnoreCase("yes") && !answer.equalsIgnoreCase("no")) {
+    		System.out.print("Only answer yes or no, please: ");
+    		answer = sc.nextLine();
+    	}
+    	
+    	if (answer.equalsIgnoreCase("yes")) {
+    		System.out.println("Please enter your");
+    		System.out.print("First name: ");
+        	data.add(sc.nextLine());
+        	System.out.print("Last name: ");
+        	data.add(sc.nextLine());
+        	System.out.print("Middle Initial: ");
+        	data.add(sc.nextLine());
+        	System.out.print("Street Address: ");
+        	data.add(sc.nextLine());
+        	System.out.print("City: ");
+        	data.add(sc.nextLine());
+        	System.out.print("State postal code: ");
+        	data.add(sc.nextLine());
+        	System.out.print("Zip: ");
+        	data.add(sc.nextLine());
+        	
+        	System.out.println("Now let's add the second user.");
+        	System.out.print("Does the person you're filing with have a Username? (yes/no): ");
+        	
+        	while (!answer.equalsIgnoreCase("yes") && !answer.equalsIgnoreCase("no")) {
+        		System.out.print("Only answer yes or no, please: ");
+        		answer = sc.nextLine();
+        	}
+        	
+        	if (answer.equalsIgnoreCase("no")) {
+        		UserFactory.createUser();
+        	}
+        	
+        	User us = Login.login();
+        	
+    	}
+    	
     	
     	System.out.print("First name: ");
     	data.add(sc.nextLine());
@@ -87,9 +129,13 @@ class UserInput {
     	data.add(sc.nextLine());
     	System.out.print("Middle Initial: ");
     	data.add(sc.nextLine());
-    	System.out.print("Address: ");
+    	System.out.print("Street Address: ");
     	data.add(sc.nextLine());
-    	System.out.print("Age: ");
+    	System.out.print("City: ");
+    	data.add(sc.nextLine());
+    	System.out.print("State postal code: ");
+    	data.add(sc.nextLine());
+    	System.out.print("Zip: ");
     	data.add(sc.nextLine());
     	
     	return data;

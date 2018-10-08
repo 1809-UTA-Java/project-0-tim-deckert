@@ -1,4 +1,6 @@
-package com.revature.app;
+package com.revature.resources;
+
+import com.revature.app.*;
 
 public class Login {
 	public static User login() {
