@@ -2,7 +2,6 @@ package com.revature.resources;
 
 import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import com.revature.app.Admin;
@@ -47,7 +46,7 @@ public class UserInput {
             }
             System.out.println("Oops! Those didn't match. Try again.");
         } while (true);
-        byte[] passHash = user_pass[1].getBytes();
+        /*byte[] passHash = user_pass[1].getBytes();
         //System.out.println(Arrays.toString(passHash));
         try {
         	MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -56,7 +55,7 @@ public class UserInput {
             //System.out.println(user_pass[1]);
         } catch (Exception ex) {
         	ex.getMessage();
-        }
+        }*/
         
         return user_pass;
     }
@@ -69,7 +68,8 @@ public class UserInput {
         user_pass[0] = sc.nextLine();
         
         System.out.print("Password: ");
-        byte[] passHash = sc.nextLine().getBytes();
+        user_pass[1] = sc.nextLine();
+        /*byte[] passHash = user_pass[1].getBytes();
         //System.out.println(Arrays.toString(passHash));
         try {
         	MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -78,7 +78,7 @@ public class UserInput {
             //System.out.println(user_pass[1]);
         } catch (Exception ex) {
         	ex.getMessage();
-        }
+        }*/
         
         return user_pass;
     }
@@ -96,7 +96,7 @@ public class UserInput {
     		System.out.print("Only answer yes or no, please: ");
     		answer = sc.nextLine();
     	}
-    	
+    	data.add(uname);
     	if (answer.equalsIgnoreCase("yes")) {
     		System.out.println("Please enter your");
     		System.out.print("First name: ");
@@ -109,8 +109,10 @@ public class UserInput {
         	data.add(sc.nextLine());
         	System.out.print("City: ");
         	data.add(sc.nextLine());
-        	System.out.print("State postal code: ");
-        	data.add(sc.nextLine());
+        	do {
+	        	System.out.print("Two letter state abbreviation: "); 
+	        	data.add(sc.nextLine());
+        	} while (data.get(data.size()-1).length() > 2);
         	System.out.print("Zip: ");
         	data.add(sc.nextLine());
         	
@@ -144,8 +146,11 @@ public class UserInput {
     	data.add(sc.nextLine());
     	System.out.print("City: ");
     	data.add(sc.nextLine());
-    	System.out.print("State postal code: ");
-    	data.add(sc.nextLine());
+    	do {
+        	System.out.print("Two letter state abbreviation: "); 
+        	data.add(sc.nextLine());
+    	} while (data.get(data.size()-1).length() > 2);
+    	
     	System.out.print("Zip: ");
     	data.add(sc.nextLine());
     	

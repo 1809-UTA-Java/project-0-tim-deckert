@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.revature.app.Employee;
-import com.revature.app.User;
 
 public class EmployeeDao {
 	public ArrayList<Employee> getEmployees() {

@@ -5,7 +5,7 @@ import com.revature.resources.*;
 class Bank {
     public static void main(String[] args) {
         //System.out.print(IntroMessage);
-    	
+    	//JDBCUtil.defaultUser();
     	String answer = UserInput.getData("Welcome to Tim's bank.\nAre you a new user?(yes/no) ");
     	
     	while (!answer.equalsIgnoreCase("yes") && !answer.equalsIgnoreCase("no")) {

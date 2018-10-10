@@ -1,12 +1,5 @@
 package com.revature.resources;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
-import com.revature.app.Account;
 import com.revature.app.Admin;
 import com.revature.app.Employee;
 import com.revature.app.User;

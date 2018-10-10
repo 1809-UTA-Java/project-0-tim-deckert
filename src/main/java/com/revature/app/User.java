@@ -1,13 +1,15 @@
 package com.revature.app;
 
-import java.util.Queue;
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import com.revature.resources.*;
+
+import com.revature.resources.AccountsDao;
+import com.revature.resources.JDBCUtil;
+import com.revature.resources.UserInput;
 
 
 public class User implements Serializable {
@@ -43,6 +45,7 @@ public class User implements Serializable {
         } catch (IOException e) {
         	e.getMessage();
         }
+        System.out.println("User Created!");
         
     }
     
@@ -79,104 +82,108 @@ public class User implements Serializable {
     
     public void deposit() {
     	this.viewAccounts();
-    	while (true) {
-	    	try {
-	    		Integer accIndex = Integer.parseInt(UserInput.getData("Which account are you depositing to: "))-1;
-	    		if (accIndex > this.accounts.size()-1 || accIndex < 0) {
-	    			System.out.println("Only numbers between 1-"+this.accounts.size()+" are accepted.");
-	    			continue;
-	    		}
-	    		
-	    		Double depositAmount = Double.parseDouble(UserInput.getData("How much would you like to deposit: "));
-	    		if (depositAmount < 0) {
-	    			String answer = UserInput.getData("No negative numbers, please. Would you like to withdraw instead? (yes/no)");
-	    			while (!answer.equalsIgnoreCase("yes") && !answer.equalsIgnoreCase("no")) {
-	            		answer = UserInput.getData("Only answer yes or no, please: ");
-	            	}
-	    			if (answer.equalsIgnoreCase("yes")) {
-	    				this.withdraw();
-	    				return;
-	    			}
-	    			continue;
-	    		}
-	    		
-	    		accounts.get(accIndex).alterFunds(depositAmount);
-	    		break;
-	    		
-	    	} catch (NumberFormatException ex) {
-	    		System.out.println("Sorry, that does not look like a number. Please try again.");
+    	if(accounts.size() > 0) {
+	    	while (true) {
+		    	try {
+		    		Integer accIndex = Integer.parseInt(UserInput.getData("Which account are you depositing to: "))-1;
+		    		if (accIndex > this.accounts.size()-1 || accIndex < 0) {
+		    			System.out.println("Only numbers between 1-"+this.accounts.size()+" are accepted.");
+		    			continue;
+		    		}
+		    		
+		    		Double depositAmount = Double.parseDouble(UserInput.getData("How much would you like to deposit: "));
+		    		if (depositAmount < 0) {
+		    			String answer = UserInput.getData("No negative numbers, please. Would you like to withdraw instead? (yes/no)");
+		    			while (!answer.equalsIgnoreCase("yes") && !answer.equalsIgnoreCase("no")) {
+		            		answer = UserInput.getData("Only answer yes or no, please: ");
+		            	}
+		    			if (answer.equalsIgnoreCase("yes")) {
+		    				this.withdraw();
+		    				return;
+		    			}
+		    			continue;
+		    		}
+		    		
+		    		accounts.get(accIndex).alterFunds(depositAmount);
+		    		break;
+		    		
+		    	} catch (NumberFormatException ex) {
+		    		System.out.println("Sorry, that does not look like a number. Please try again.");
+		    	}
 	    	}
     	}
     }
     
     public void withdraw() {
     	this.viewAccounts();
-    	while (true) {
-	    	try {
-	    		Integer accIndex = Integer.parseInt(UserInput.getData("Which account are you withdrawing from: "))-1;
-	    		
-	    		if (accIndex > this.accounts.size()-1 || accIndex < 0) {
-	    			System.out.println("Only numbers between 1-"+this.accounts.size()+" are accepted.");
-	    			continue;
-	    		}
-	    		
-	    		Double withdrawAmount = Double.parseDouble(UserInput.getData("How much would you like to withdraw: "));
-	    		if (withdrawAmount < 0) {
-	    			String answer = UserInput.getData("No negative numbers, please. Would you like to deposit instead? (yes/no)");
-	    			while (!answer.equalsIgnoreCase("yes") && !answer.equalsIgnoreCase("no")) {
-	            		answer = UserInput.getData("Only answer yes or no, please: ");
-	            	}
-	    			if (answer.equalsIgnoreCase("yes")) {
-	    				this.deposit();
-	    				return;
-	    			}
-	    		}
-	    		
-	    		accounts.get(accIndex).alterFunds(-withdrawAmount);
-	    		break;
-	    		
-	    	} catch (NumberFormatException ex) {
-	    		System.out.println("Sorry, that does not look like a number. Please try again.");
+    	if (accounts.size() > 0) {
+	    	while (true) {
+		    	try {
+		    		Integer accIndex = Integer.parseInt(UserInput.getData("Which account are you withdrawing from: "))-1;
+		    		
+		    		if (accIndex > this.accounts.size()-1 || accIndex < 0) {
+		    			System.out.println("Only numbers between 1-"+this.accounts.size()+" are accepted.");
+		    			continue;
+		    		}
+		    		
+		    		Double withdrawAmount = Double.parseDouble(UserInput.getData("How much would you like to withdraw: "));
+		    		if (withdrawAmount < 0) {
+		    			String answer = UserInput.getData("No negative numbers, please. Would you like to deposit instead? (yes/no)");
+		    			while (!answer.equalsIgnoreCase("yes") && !answer.equalsIgnoreCase("no")) {
+		            		answer = UserInput.getData("Only answer yes or no, please: ");
+		            	}
+		    			if (answer.equalsIgnoreCase("yes")) {
+		    				this.deposit();
+		    				return;
+		    			}
+		    		}
+		    		
+		    		accounts.get(accIndex).alterFunds(-withdrawAmount);
+		    		break;
+		    		
+		    	} catch (NumberFormatException ex) {
+		    		System.out.println("Sorry, that does not look like a number. Please try again.");
+		    	}
 	    	}
-    	}
-    	
+    	}	
     }
 
     public void transfer() {
     	this.viewAccounts();
-    	while (true) {
-	    	try {
-	    		Integer accIndexFrom = Integer.parseInt(UserInput.getData("Which account would you like to transfer from: "))-1;
-	    		Integer accIndexTo = Integer.parseInt(UserInput.getData("Which account would you like to transfer to: "))-1;
-	    		
-	    		if (accIndexFrom > this.accounts.size()-1 || accIndexFrom < 0
-	    				|| accIndexTo > this.accounts.size()-1 || accIndexTo < 0) {
-	    			System.out.println("Only numbers between 1-"+this.accounts.size()+" are accepted.");
-	    			continue;
-	    		}
-	    		
-	    		Double amount = Double.parseDouble(UserInput.getData("How much would you like to transfer: "));
-	    		if (amount < 0) {
-	    			String answer = UserInput.getData("You entered a negative number. Would you like to swap to and from? (yes/no)");
-	    			while (!answer.equalsIgnoreCase("yes") && !answer.equalsIgnoreCase("no")) {
-	            		answer = UserInput.getData("Only answer yes or no, please: ");
-	            	}
-	    			if (answer.equalsIgnoreCase("yes")) {
-	    				accIndexFrom += accIndexTo;
-	    				accIndexTo = accIndexFrom - accIndexTo;
-	    				accIndexFrom -= accIndexTo;
-	    			}
-	    		}
-	    		
-	    		accounts.get(accIndexFrom).alterFunds(-amount);
-	    		accounts.get(accIndexTo).alterFunds(amount);
-	    		break;
-	    		
-	    	} catch (NumberFormatException ex) {
-	    		System.out.println("Sorry, that does not look like a number. Please try again.");
+    	if (accounts.size() > 0) {
+	    	while (true) {
+		    	try {
+		    		Integer accIndexFrom = Integer.parseInt(UserInput.getData("Which account would you like to transfer from: "))-1;
+		    		Integer accIndexTo = Integer.parseInt(UserInput.getData("Which account would you like to transfer to: "))-1;
+		    		
+		    		if (accIndexFrom > this.accounts.size()-1 || accIndexFrom < 0
+		    				|| accIndexTo > this.accounts.size()-1 || accIndexTo < 0) {
+		    			System.out.println("Only numbers between 1-"+this.accounts.size()+" are accepted.");
+		    			continue;
+		    		}
+		    		
+		    		Double amount = Double.parseDouble(UserInput.getData("How much would you like to transfer: "));
+		    		if (amount < 0) {
+		    			String answer = UserInput.getData("You entered a negative number. Would you like to swap to and from? (yes/no)");
+		    			while (!answer.equalsIgnoreCase("yes") && !answer.equalsIgnoreCase("no")) {
+		            		answer = UserInput.getData("Only answer yes or no, please: ");
+		            	}
+		    			if (answer.equalsIgnoreCase("yes")) {
+		    				accIndexFrom += accIndexTo;
+		    				accIndexTo = accIndexFrom - accIndexTo;
+		    				accIndexFrom -= accIndexTo;
+		    			}
+		    		}
+		    		
+		    		accounts.get(accIndexFrom).alterFunds(-amount);
+		    		accounts.get(accIndexTo).alterFunds(amount);
+		    		break;
+		    		
+		    	} catch (NumberFormatException ex) {
+		    		System.out.println("Sorry, that does not look like a number. Please try again.");
+		    	}
 	    	}
     	}
-	
     }
 
     public void displayUser() {
