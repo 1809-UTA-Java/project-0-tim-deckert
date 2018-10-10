@@ -14,14 +14,17 @@ public class Users implements Serializable {
 
     public static boolean contains(String uname) {
     	PreparedStatement ps = null;
+    	//System.out.println("we in contains1 "+uname);
     	try (Connection conn = JDBCUtil.getConnection()) {
     		String sql = "SELECT UNAME FROM USERS WHERE UNAME = ?";
         	ps = conn.prepareStatement(sql);
         	ps.setString(1, uname);
         	ResultSet rs = ps.executeQuery();
-        	ps.close();
         	
-        	if (rs != null) {
+        	//ps.close();
+        	
+        	if (rs.next()) {
+        		System.out.println("what?");
         		rs.close();
         		return true;
         	}
@@ -38,15 +41,14 @@ public class Users implements Serializable {
     
     public static boolean contains(String uname, String pword) {
     	PreparedStatement ps = null;
+    	//System.out.println("we in contains2"+uname+" "+pword);
     	try (Connection conn = JDBCUtil.getConnection()) {
-    		String sql = "SELECT UNAME, PWORD FROM USERS WHERE UNAME = ?, PWORD = ?";
+    		String sql = "SELECT UNAME, PWORD FROM USERS WHERE UNAME = ?";
         	ps = conn.prepareStatement(sql);
         	ps.setString(1, uname);
         	ResultSet rs = ps.executeQuery();
-        	ps.close();
         	
-        	if (rs != null) {
-        		rs.next();
+        	if (rs.next()) {
         		return rs.getString("UNAME").equals(uname) && rs.getString("PWORD").equals(pword);
         	}
         	rs.close();

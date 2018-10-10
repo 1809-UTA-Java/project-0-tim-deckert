@@ -11,6 +11,7 @@ class Bank {
         }
         else {
         	User user = Login.login();
+        	int choice;
         	if (user instanceof Admin) {
         		
         	}
@@ -18,6 +19,7 @@ class Bank {
         		
         	}
         	else {
+        		UserInput.userPortal(user);
         		
         	}
         }

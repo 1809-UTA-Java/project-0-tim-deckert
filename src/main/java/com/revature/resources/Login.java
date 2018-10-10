@@ -8,10 +8,11 @@ public class Login {
 		User loggingIn;
 		
 		user_pass = UserInput.getLoginInfo();
-		
-		while ((loggingIn = Users.verify(user_pass[0], user_pass[1])) == null) {
+		loggingIn = Users.verify(user_pass[0], user_pass[1]);
+		while (loggingIn == null) {
 			UserInput.getData("That username and password combination is not correct\n(Press Enter to continue)");
 			user_pass = UserInput.getLoginInfo();
+			loggingIn = Users.verify(user_pass[0], user_pass[1]);
 		}
 		
 		return loggingIn;

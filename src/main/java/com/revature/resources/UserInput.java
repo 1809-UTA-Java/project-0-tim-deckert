@@ -2,8 +2,13 @@ package com.revature.resources;
 
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
-import com.revature.app.*;
+
+import com.revature.app.Admin;
+import com.revature.app.Application;
+import com.revature.app.Employee;
+import com.revature.app.User;
 
 public class UserInput {
     private static Scanner sc = new Scanner(System.in);
@@ -43,11 +48,12 @@ public class UserInput {
             System.out.println("Oops! Those didn't match. Try again.");
         } while (true);
         byte[] passHash = user_pass[1].getBytes();
-        
+        System.out.println(Arrays.toString(passHash));
         try {
         	MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(passHash);
-            user_pass[1] = md.digest().toString();
+            user_pass[1] = new String(md.digest());
+            System.out.println(user_pass[1]);
         } catch (Exception ex) {
         	ex.getMessage();
         }
@@ -64,11 +70,12 @@ public class UserInput {
         
         System.out.print("Password: ");
         byte[] passHash = sc.nextLine().getBytes();
-        
+        System.out.println(Arrays.toString(passHash));
         try {
         	MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(passHash);
-            user_pass[1] = md.digest().toString();
+            user_pass[1] = new String(md.digest());
+            System.out.println(user_pass[1]);
         } catch (Exception ex) {
         	ex.getMessage();
         }
@@ -76,7 +83,8 @@ public class UserInput {
         return user_pass;
     }
 
-    public static ArrayList<String> apply() {
+    public static void apply(String uname) {
+    	ArrayList<Application> apps = new ArrayList<>();
     	ArrayList<String> data = new ArrayList<>();
     	System.out.println("Thank you for applying for a Tim's Bank account");
     	System.out.println("We need some more information to get started");
@@ -106,7 +114,10 @@ public class UserInput {
         	System.out.print("Zip: ");
         	data.add(sc.nextLine());
         	
-        	System.out.println("Now let's add the second user.");
+        	apps.add(new Application(data));
+        	data.clear();
+        	
+        	System.out.println("Now, let's add the second user.");
         	System.out.print("Does the person you're filing with have a Username? (yes/no): ");
         	
         	while (!answer.equalsIgnoreCase("yes") && !answer.equalsIgnoreCase("no")) {
@@ -119,9 +130,9 @@ public class UserInput {
         	}
         	
         	User us = Login.login();
+        	data.add(us.getUsername());
         	
     	}
-    	
     	
     	System.out.print("First name: ");
     	data.add(sc.nextLine());
@@ -138,6 +149,131 @@ public class UserInput {
     	System.out.print("Zip: ");
     	data.add(sc.nextLine());
     	
-    	return data;
+    	apps.add(new Application(data));
+    	
     }
+
+    public static void userPortal(User user) {
+    	System.out.println("Welcome to the customer portal. What would you like to do?");
+    	System.out.println("(1) view existing accounts");
+    	System.out.println("(2) apply for a new account");
+    	System.out.println("(3) deposit funds into an account");
+    	System.out.println("(4) withdraw funds from an account");
+    	System.out.println("(5) transfer funds from one account to another");
+    	System.out.println("Be forewarned! Anything other than 1-5 will exit.");
+    	System.out.println();
+    	
+    	int choice = sc.nextInt();
+    	sc.nextLine();
+    	switch (choice) {
+		case 1:
+			user.viewAccounts();
+			break;
+		case 2:
+			user.apply();
+			break;
+		case 3:
+			user.deposit();
+			break;
+		case 4:
+			user.withdraw();
+			break;
+		case 5:
+			user.transfer();
+			break;
+			default:
+				System.out.println("Goodbye");
+		}
+    }
+    
+    public static void employeePortal(Employee e) {
+    	System.out.println("Welcome to the employee portal. What would you like to do?");
+    	System.out.println("(1) view all of your customers");
+    	System.out.println("(2) view one of your customers");
+    	System.out.println("(3) approve/deny applications");
+    	System.out.println("(4) enter a customer portal");
+    	System.out.println("Be forewarned! Anything other than 1-4 will exit.");
+    	System.out.println();
+    	
+    	int choice = sc.nextInt();
+    	sc.nextLine();
+    	switch (choice) {
+		case 1:
+			e.viewUsers();
+			break;
+		case 2:
+			e.viewUser();
+			break;
+		case 3:
+			e.approveApplication();
+			break;
+		case 4:
+			UserInput.userPortal(e);
+			break;
+			default:
+				System.out.println("Goodbye");
+    	}
+    }
+    public static void adminPortal(Admin a) {
+    	System.out.println("Welcome to the administrator portal. What would you like to do?");
+    	System.out.println("(1) view all customers' info");
+    	System.out.println("(2) view one customer's info");
+    	System.out.println("(3) approve/deny applications");
+    	System.out.println("(4) alter accounts");
+    	System.out.println("(5) hire employee");
+    	System.out.println("(6) fire employee");
+    	System.out.println("(6) enter a customer portal");
+    	System.out.println("Be forewarned! Anything other than 1-4 will exit.");
+    	System.out.println();
+    	
+    	int choice = sc.nextInt();
+    	sc.nextLine();
+    	switch (choice) {
+		case 1:
+			a.viewUsers();
+			break;
+		case 2:
+			a.viewUser();
+			break;
+		case 3:
+			a.approveApplication();
+			break;
+		case 4:
+			UserInput.adminAcc(a);
+		case 6:
+			UserInput.userPortal(a);
+			break;
+			default:
+				System.out.println("Goodbye");
+    	}
+    }
+    
+    public static void adminAcc(Admin a) {
+    	System.out.println("(1) view all existing accounts");
+    	System.out.println("(2) deposit funds into an account");
+    	System.out.println("(3) withdraw funds from an account");
+    	System.out.println("(4) transfer funds from one account to another");
+    	System.out.println("(5) delete a bank account");
+    	int choice = sc.nextInt();
+    	sc.nextLine();
+    	switch (choice) {
+		case 1:
+			a.viewAccounts();
+			break;
+		case 2:
+			a.deposit();
+			break;
+		case 3:
+			a.withdraw();
+			break;
+		case 4:
+			a.transfer();
+			break;
+		case 5:
+			a.delete();
+			default:
+				System.out.println("Goodbye");
+		}
+    }
+
 }

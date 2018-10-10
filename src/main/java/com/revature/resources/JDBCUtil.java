@@ -13,6 +13,5 @@ public class JDBCUtil {
 		
 		DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
 		return DriverManager.getConnection(url, username, password);
-		
 	}
 }
