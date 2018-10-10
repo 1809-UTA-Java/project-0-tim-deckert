@@ -21,6 +21,33 @@ public class Employee extends User {
 	protected ArrayList<User> users; 
 	public Employee(String username, String password) {
 		super(username, password);
+			
+		PreparedStatement ps = null;
+		
+		try (Connection conn = JDBCUtil.getConnection()) {
+        	String sql = "INSERT INTO EMPLOYEE (UNAME, PERMISSION) VALUES (?, 'E')";
+        	ps = conn.prepareStatement(sql);
+        	ps.setString(1, username);
+        	//ps.setString(2, password);
+        	ps.executeQuery();
+        	ps.close();	
+        	
+        } catch (SQLException ex) {
+        	ex.getMessage();
+        } catch (IOException e) {
+        	e.getMessage();
+        }
+		
+	}
+
+	public Employee(Integer employeeID, String username) {
+		this.employeeID = employeeID;
+		this.username = username;
+	}
+	
+	public void displayEmployee () {
+		System.out.println("Employee ID: "+employeeID);
+		super.displayUser();
 	}
 	
 	public void pullApplications() {

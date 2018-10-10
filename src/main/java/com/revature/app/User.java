@@ -46,7 +46,6 @@ public class User implements Serializable {
         
     }
     
-    
 	public User(String username, String firstName, String lastName, Character middleInitial,
 			String address, String city, String state, Integer zip) {
 		super();

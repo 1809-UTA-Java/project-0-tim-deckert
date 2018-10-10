@@ -24,7 +24,6 @@ public class Users implements Serializable {
         	//ps.close();
         	
         	if (rs.next()) {
-        		System.out.println("what?");
         		rs.close();
         		return true;
         	}
@@ -63,12 +62,36 @@ public class Users implements Serializable {
     }
     
     public static User verify(String uname, String pword) {
-    	
+    	User user = null;
     	if (Users.contains(uname, pword)) {
-    		User user = UserFactory.createUser(uname, pword);
-    		return user;
+    		try (Connection conn = JDBCUtil.getConnection()) {
+    			String sql = "SELECT EMPLOYEE.PERMISSION FROM USERS INNER JOIN EMPLOYEE ON EMPLOYEE.UNAME = USERS.UNAME WHERE UNAME = ?";
+    			PreparedStatement ps = conn.prepareStatement(sql);
+            	ps.setString(1, uname);
+            	ResultSet rs = ps.executeQuery();
+            	
+            	if (rs.next()) {
+            		char perm = rs.getString("PERMISSION").charAt(0);
+            		if (perm == 'A') {
+            			user = UserFactory.createAdmin(uname, pword);
+            		}
+            		else if (perm == 'E') {
+            			user = UserFactory.createEmployee(uname, pword);
+            		}
+            	}
+            	else {
+            		user = UserFactory.createUser(uname, pword);
+            	}
+            	rs.close();
+            	
+            } catch (SQLException ex) {
+            	ex.getMessage();
+            } catch (IOException e) {
+            	e.getMessage();
+        	}
     	}
-    	return null;
+    	
+    	return user;
     }
 
 }

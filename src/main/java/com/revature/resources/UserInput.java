@@ -48,12 +48,12 @@ public class UserInput {
             System.out.println("Oops! Those didn't match. Try again.");
         } while (true);
         byte[] passHash = user_pass[1].getBytes();
-        System.out.println(Arrays.toString(passHash));
+        //System.out.println(Arrays.toString(passHash));
         try {
         	MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(passHash);
             user_pass[1] = new String(md.digest());
-            System.out.println(user_pass[1]);
+            //System.out.println(user_pass[1]);
         } catch (Exception ex) {
         	ex.getMessage();
         }
@@ -70,12 +70,12 @@ public class UserInput {
         
         System.out.print("Password: ");
         byte[] passHash = sc.nextLine().getBytes();
-        System.out.println(Arrays.toString(passHash));
+        //System.out.println(Arrays.toString(passHash));
         try {
         	MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(passHash);
             user_pass[1] = new String(md.digest());
-            System.out.println(user_pass[1]);
+            //System.out.println(user_pass[1]);
         } catch (Exception ex) {
         	ex.getMessage();
         }
@@ -154,126 +154,172 @@ public class UserInput {
     }
 
     public static void userPortal(User user) {
-    	System.out.println("Welcome to the customer portal. What would you like to do?");
-    	System.out.println("(1) view existing accounts");
-    	System.out.println("(2) apply for a new account");
-    	System.out.println("(3) deposit funds into an account");
-    	System.out.println("(4) withdraw funds from an account");
-    	System.out.println("(5) transfer funds from one account to another");
-    	System.out.println("Be forewarned! Anything other than 1-5 will exit.");
-    	System.out.println();
-    	
-    	int choice = sc.nextInt();
-    	sc.nextLine();
-    	switch (choice) {
-		case 1:
-			user.viewAccounts();
-			break;
-		case 2:
-			user.apply();
-			break;
-		case 3:
-			user.deposit();
-			break;
-		case 4:
-			user.withdraw();
-			break;
-		case 5:
-			user.transfer();
-			break;
-			default:
-				System.out.println("Goodbye");
-		}
+    	int choice = 0;
+    	while (choice != 6) {
+	    	System.out.println("Welcome to the customer portal. What would you like to do?");
+	    	System.out.println("(1) view existing accounts");
+	    	System.out.println("(2) apply for a new account");
+	    	System.out.println("(3) deposit funds into an account");
+	    	System.out.println("(4) withdraw funds from an account");
+	    	System.out.println("(5) transfer funds from one account to another");
+	    	System.out.println("(6) to exit");
+	    	System.out.println();
+	    	
+	    	choice = sc.nextInt();
+	    	sc.nextLine();
+	    	switch (choice) {
+			case 1:
+				user.viewAccounts();
+				break;
+			case 2:
+				user.apply();
+				break;
+			case 3:
+				user.deposit();
+				break;
+			case 4:
+				user.withdraw();
+				break;
+			case 5:
+				user.transfer();
+				break;
+				default:
+					System.out.println("Goodbye");
+			}
+    	}
     }
     
     public static void employeePortal(Employee e) {
-    	System.out.println("Welcome to the employee portal. What would you like to do?");
-    	System.out.println("(1) view all of your customers");
-    	System.out.println("(2) view one of your customers");
-    	System.out.println("(3) approve/deny applications");
-    	System.out.println("(4) enter a customer portal");
-    	System.out.println("Be forewarned! Anything other than 1-4 will exit.");
-    	System.out.println();
-    	
-    	int choice = sc.nextInt();
-    	sc.nextLine();
-    	switch (choice) {
-		case 1:
-			e.viewUsers();
-			break;
-		case 2:
-			e.viewUser();
-			break;
-		case 3:
-			e.approveApplication();
-			break;
-		case 4:
-			UserInput.userPortal(e);
-			break;
-			default:
-				System.out.println("Goodbye");
+    	int choice = 0;
+    	while (choice != 5) {
+	    	System.out.println("Welcome to the employee portal. What would you like to do?");
+	    	System.out.println("(1) view all of your customers");
+	    	System.out.println("(2) view one of your customers");
+	    	System.out.println("(3) approve/deny applications");
+	    	System.out.println("(4) enter a customer portal");
+	    	System.out.println("(5) to exit");
+	    	System.out.println();
+	    	
+	    	choice = sc.nextInt();
+	    	sc.nextLine();
+	    	switch (choice) {
+			case 1:
+				e.viewUsers();
+				break;
+			case 2:
+				e.viewUser();
+				break;
+			case 3:
+				e.approveApplication();
+				break;
+			case 4:
+				UserInput.userPortal(e);
+				break;
+				default:
+					System.out.println("Goodbye");
+	    	}
     	}
     }
     public static void adminPortal(Admin a) {
-    	System.out.println("Welcome to the administrator portal. What would you like to do?");
-    	System.out.println("(1) view all customers' info");
-    	System.out.println("(2) view one customer's info");
-    	System.out.println("(3) approve/deny applications");
-    	System.out.println("(4) alter accounts");
-    	System.out.println("(5) hire employee");
-    	System.out.println("(6) fire employee");
-    	System.out.println("(6) enter a customer portal");
-    	System.out.println("Be forewarned! Anything other than 1-4 will exit.");
-    	System.out.println();
-    	
-    	int choice = sc.nextInt();
-    	sc.nextLine();
-    	switch (choice) {
-		case 1:
-			a.viewUsers();
-			break;
-		case 2:
-			a.viewUser();
-			break;
-		case 3:
-			a.approveApplication();
-			break;
-		case 4:
-			UserInput.adminAcc(a);
-		case 6:
-			UserInput.userPortal(a);
-			break;
-			default:
-				System.out.println("Goodbye");
+    	int choice = 0;
+    	while (choice != 7) {
+	    	System.out.println("Welcome to the administrator portal. What would you like to do?");
+	    	System.out.println("(1) view all customers' info");
+	    	System.out.println("(2) view one customer's info");	    	
+	    	System.out.println("(3) approve/deny applications");
+	    	System.out.println("(4) alter accounts");
+	    	System.out.println("(5) alter employees");
+	    	System.out.println("(6) enter a customer portal");
+	    	System.out.println("(7) to exit");
+	    	System.out.println();
+	    	
+	    	choice = sc.nextInt();
+	    	sc.nextLine();
+	    	switch (choice) {
+			case 1:
+				a.viewUsers();
+				break;
+			case 2:
+				a.viewUser();
+				break;
+			case 3:
+				a.approveApplication();
+				break;
+			case 4:
+				UserInput.adminAcc(a);
+				break;
+			case 5:
+				UserInput.adminEmp(a);
+			case 6:
+				UserInput.userPortal(a);
+				break;
+			case 7:
+				return;
+	    	}
     	}
     }
     
     public static void adminAcc(Admin a) {
-    	System.out.println("(1) view all existing accounts");
-    	System.out.println("(2) deposit funds into an account");
-    	System.out.println("(3) withdraw funds from an account");
-    	System.out.println("(4) transfer funds from one account to another");
-    	System.out.println("(5) delete a bank account");
-    	int choice = sc.nextInt();
-    	sc.nextLine();
-    	switch (choice) {
-		case 1:
-			a.viewAccounts();
-			break;
-		case 2:
-			a.deposit();
-			break;
-		case 3:
-			a.withdraw();
-			break;
-		case 4:
-			a.transfer();
-			break;
-		case 5:
-			a.delete();
-			default:
-				System.out.println("Goodbye");
+    	int choice = 0;
+    	while (choice != 6) {
+	    	System.out.println("(1) view all existing accounts");
+	    	System.out.println("(2) deposit funds into an account");
+	    	System.out.println("(3) withdraw funds from an account");
+	    	System.out.println("(4) transfer funds from one account to another");
+	    	System.out.println("(5) cancel a bank account");
+	    	System.out.println("(6) back to main admin portal");
+	    	choice = sc.nextInt();
+	    	sc.nextLine();
+	    	switch (choice) {
+			case 1:
+				a.viewAccounts();
+				break;
+			case 2:
+				a.deposit();
+				break;
+			case 3:
+				a.withdraw();
+				break;
+			case 4:
+				a.transfer();
+				break;
+			case 5:
+				a.delete();
+				break;
+			case 6:
+				return;
+	    	}
 		}
     }
 
+    public static void adminEmp(Admin a) {
+    	int choice = 0;
+    	while (choice != 5) {
+    		System.out.println("(1) view all employees");
+    		System.out.println("(2) hire employee");
+	    	System.out.println("(3) hire admin");
+	    	System.out.println("(4) fire employee");
+	    	System.out.println("(5) to exit");
+	    	
+	    	choice = sc.nextInt();
+	    	sc.nextLine();
+	    	
+	    	switch (choice) {
+	    	case 1:
+	    		a.viewEmployees();
+	    	case 2:
+				a.hireEmployee();
+				break;
+			case 3:
+				a.hireAdmin();
+				break;
+			case 4:
+				a.fireEmployee();
+				break;
+			case 5:
+				return;
+	    	}
+			
+    	}
+    }
 }

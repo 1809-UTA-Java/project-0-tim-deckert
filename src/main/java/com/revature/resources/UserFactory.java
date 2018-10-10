@@ -22,9 +22,9 @@ public class UserFactory {
     	return new User(uname, pword);
     }
     
-    public static User createUser(String username, String password, String firstName, String lastName, Character middleInitial,
-	String address, String city, String state, Integer zip, ArrayList<Account> accounts) {
-    	return new User(username, password, firstName, lastName, middleInitial, address, city, state, zip, accounts);
+    public static User createUser(String username, String firstName, String lastName, Character middleInitial,
+	String address, String city, String state, Integer zip) {
+    	return new User(username, firstName, lastName, middleInitial, address, city, state, zip);
     }
     
     public static Employee createEmployee() {
@@ -33,9 +33,17 @@ public class UserFactory {
     	return employee;
      }
     
+    public static Employee createEmployee(String uname, String pword) {
+    	return new Employee(uname, pword);
+    }
+    
      public static Admin createAdmin() {
      	 String[] user_pass = UserInput.getNewUser();
      	 Admin admin = new Admin(user_pass[0], user_pass[1]);
      	 return admin;
+     }
+     
+     public static Admin createAdmin(String uname, String pword) {
+     	return new Admin(uname, pword);
      }
 }

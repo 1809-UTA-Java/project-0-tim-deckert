@@ -1,7 +1,16 @@
 package com.revature.app;
 
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import com.revature.resources.AccountsDao;
+import com.revature.resources.EmployeeDao;
+import com.revature.resources.JDBCUtil;
 import com.revature.resources.UserDao;
+import com.revature.resources.UserFactory;
 import com.revature.resources.UserInput;
 
 //import java.util.ArrayList;
@@ -9,12 +18,29 @@ import com.revature.resources.UserInput;
 
 final public class Admin extends Employee {
 	// private static ArrayList <Account> masterAccountList = new
-	// ArrayList<Account>();
+	private ArrayList<Employee> employees;
 	private AccountsDao accd;
 
 	public Admin(String username, String password) {
 		super(username, password);
 		accd = new AccountsDao();
+		
+		PreparedStatement ps = null;
+		
+		try (Connection conn = JDBCUtil.getConnection()) {
+        	String sql = "INSERT INTO EMPLOYEE (UNAME, PERMISSION) VALUES (?, 'A')";
+        	ps = conn.prepareStatement(sql);
+        	ps.setString(1, username);
+        	//ps.setString(2, password);
+        	ps.executeQuery();
+        	ps.close();	
+        	
+        } catch (SQLException ex) {
+        	ex.getMessage();
+        } catch (IOException e) {
+        	e.getMessage();
+        }
+		
 	}
 
 	@Override
@@ -23,6 +49,11 @@ final public class Admin extends Employee {
 		users = userd.getUsersAdmin(this.employeeID);
 	}
 
+	public void pullEmployees() {
+		EmployeeDao empd = new EmployeeDao();
+		employees = empd.getEmployees();
+	}
+	
 	@Override
 	public void viewAccounts() {
 		this.accounts = accd.getAccountsAdmin(this.username);
@@ -148,4 +179,40 @@ final public class Admin extends Employee {
 			}
 		}
 	}
+
+	public void hireEmployee() {
+		UserFactory.createEmployee();
+	}
+	public void hireAdmin() {
+		UserFactory.createAdmin();
+	}
+	public void fireEmployee() {
+		UserInput.getData("Enter the ID number of the employee you want to fire");
+		PreparedStatement ps = null;
+		
+		try (Connection conn = JDBCUtil.getConnection()) {
+//			String sql = "DELETE FROM USERS WHERE UNAME = "
+//					+ "(SELECT USER.UNAME FROM USERS INNER JOIN EMPLOYEE ON USERS.UNAME = EMPLOYEE.UNAME WHERE EMPLOYEE.E_ID = ?;";
+        	String sql = "DELETE FROM EMPLOYEE WHERE E_ID = (?)";
+        	ps = conn.prepareStatement(sql);
+        	ps.setString(1, username);
+        	//ps.setString(2, username);
+        	//ps.setString(2, password);
+        	ps.executeQuery();
+        	ps.close();	
+        	
+        } catch (SQLException ex) {
+        	ex.getMessage();
+        } catch (IOException e) {
+        	e.getMessage();
+        }
+		
+	}
+
+	public void viewEmployees() {
+		for (Employee e : employees) {
+			e.displayEmployee();
+		}
+	}
+	
 }
